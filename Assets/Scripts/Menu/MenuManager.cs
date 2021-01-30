@@ -22,6 +22,7 @@ public class MenuManager : MonoBehaviour
 
     public void PlayTrackOne()
     {
+        paramTrack.trackName = "Track 1";
         SceneManager.LoadScene("Track1");
     }
 

@@ -2,8 +2,10 @@
 /// Date: May 2019
 
 #region Includes
+
 using UnityEngine;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Class representing a controlling container for a 2D physical simulation
@@ -12,9 +14,12 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
     #region Members
+
     #region IDGenerator
+
     // Used for unique ID generation
     private static int idGenerator = 0;
+
     /// <summary>
     /// Returns the next unique id in the sequence.
     /// </summary>
@@ -22,7 +27,8 @@ public class CarController : MonoBehaviour
     {
         get { return idGenerator++; }
     }
-    #endregion
+
+    #endregion IDGenerator
 
     // Maximum delay in seconds between the collection of two checkpoints until this car dies.
     private const float MAX_CHECKPOINT_DELAY = 7;
@@ -64,6 +70,16 @@ public class CarController : MonoBehaviour
         get { return Movement.CurrentInputs; }
     }
 
+    public double GetTurnInput()
+    {
+        return Movement.TurnInput;
+    }
+
+    public double GetEngineInput()
+    {
+        return Movement.EngineInput;
+    }
+
     /// <summary>
     /// The cached SpriteRenderer of this car.
     /// </summary>
@@ -75,26 +91,31 @@ public class CarController : MonoBehaviour
 
     private Sensor[] sensors;
     private float timeSinceLastCheckpoint;
-    #endregion
+
+    #endregion Members
 
     #region Constructors
-    void Awake()
+
+    private void Awake()
     {
         //Cache components
         Movement = GetComponent<CarMovement>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         sensors = GetComponentsInChildren<Sensor>();
     }
-    void Start()
+
+    private void Start()
     {
         Movement.HitWall += Die;
 
         //Set name to be unique
         this.name = "Car (" + NextID + ")";
     }
-    #endregion
+
+    #endregion Constructors
 
     #region Methods
+
     /// <summary>
     /// Restarts this car, making it movable again.
     /// </summary>
@@ -111,13 +132,13 @@ public class CarController : MonoBehaviour
     }
 
     // Unity method for normal update
-    void Update()
+    private void Update()
     {
         timeSinceLastCheckpoint += Time.deltaTime;
     }
 
     // Unity method for physics update
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         //Get control inputs from Agent
         if (!UseUserInput)
@@ -154,5 +175,6 @@ public class CarController : MonoBehaviour
     {
         timeSinceLastCheckpoint = 0;
     }
-    #endregion
+
+    #endregion Methods
 }

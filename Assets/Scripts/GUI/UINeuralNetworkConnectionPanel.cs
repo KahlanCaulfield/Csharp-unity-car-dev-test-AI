@@ -26,6 +26,9 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
     [SerializeField]
     private Color NegativeColor;
 
+    [SerializeField]
+    private Canvas canvas;
+
     #endregion Members
 
     #region Methods
@@ -101,7 +104,7 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
 
         //Set connection length (height)
         Vector2 connectionVec = this.transform.position - otherNode.transform.position;
-        //sizeDelta.y = connectionVec.magnitude / GameStateManager.Instance.UIController.Canvas.scaleFactor;
+        sizeDelta.y = connectionVec.magnitude / canvas.scaleFactor;
 
         connection.rectTransform.sizeDelta = sizeDelta;
 

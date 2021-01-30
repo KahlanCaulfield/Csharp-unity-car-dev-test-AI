@@ -127,8 +127,7 @@ public class EvolutionManager : MonoBehaviour
         //Statistics
         if (SaveStatistics)
         {
-            // TODO : Get TrackName for file
-            statisticsFileName = "Evaluation - " + "Track1" + " " + DateTime.Now.ToString("yyyy_MM_dd_HH-mm-ss");
+            statisticsFileName = "Evaluation - " + paramsTrack.trackName + " " + DateTime.Now.ToString("yyyy_MM_dd_HH-mm-ss");
             WriteStatisticsFileStart();
             geneticAlgorithm.FitnessCalculationFinished += WriteStatisticsToFile;
         }
@@ -147,9 +146,8 @@ public class EvolutionManager : MonoBehaviour
     // Writes the starting line to the statistics file, stating all genetic algorithm parameters.
     private void WriteStatisticsFileStart()
     {
-        // TODO: Get TrackName For Saving File
         File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + paramsTrack.populationSize +
-                ", on Track \"" + "Track1" + "\", using the following GA operators: " + Environment.NewLine +
+                ", on Track \"" + paramsTrack.trackName + "\", using the following GA operators: " + Environment.NewLine +
                 "Selection: " + geneticAlgorithm.Selection.Method.Name + Environment.NewLine +
                 "Recombination: " + geneticAlgorithm.Recombination.Method.Name + Environment.NewLine +
                 "Mutation: " + geneticAlgorithm.Mutation.Method.Name + Environment.NewLine +

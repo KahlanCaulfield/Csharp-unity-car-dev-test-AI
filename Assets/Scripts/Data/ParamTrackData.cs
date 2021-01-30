@@ -7,4 +7,5 @@ public class ParamTrackData : ScriptableObject
 {
     public int populationSize;
     public bool SaveFile;
+    public string trackName;
 }

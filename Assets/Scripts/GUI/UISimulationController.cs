@@ -5,7 +5,7 @@
 
 using UnityEngine.UI;
 using UnityEngine;
-using System;
+using TMPro;
 
 #endregion Includes
 
@@ -38,13 +38,16 @@ public class UISimulationController : MonoBehaviour
 
     // GUI element references to be set in Unity Editor.
     [SerializeField]
-    private Text[] InputTexts;
+    private TMP_Text turnTxt;
 
     [SerializeField]
-    private Text Evaluation;
+    private TMP_Text engineTxt;
 
     [SerializeField]
-    private Text GenerationCount;
+    private TMP_Text evalTxt;
+
+    [SerializeField]
+    private TMP_Text genCountTxt;
 
     [SerializeField]
     private UINeuralNetworkPanel NeuralNetPanel;
@@ -53,18 +56,15 @@ public class UISimulationController : MonoBehaviour
 
     private void Update()
     {
-        if (Target != null)
+        if (target != null)
         {
             //Display controls
-            if (Target.CurrentControlInputs != null)
-            {
-                for (int i = 0; i < InputTexts.Length; i++)
-                    InputTexts[i].text = Target.CurrentControlInputs[i].ToString();
-            }
+            turnTxt.text = target.GetTurnInput().ToString();
+            engineTxt.text = target.GetEngineInput().ToString();
 
             //Display evaluation and generation count
-            Evaluation.text = Target.Agent.Genotype.Evaluation.ToString();
-            GenerationCount.text = EvolutionManager.Instance.GenerationCount.ToString();
+            evalTxt.text = target.Agent.Genotype.Evaluation.ToString();
+            genCountTxt.text = EvolutionManager.Instance.GenerationCount.ToString();
         }
     }
 }
