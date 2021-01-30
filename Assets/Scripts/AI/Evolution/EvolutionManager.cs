@@ -1,13 +1,14 @@
 ﻿/// Author: PsykoDev
 /// Date: May 2019
 
-
 #region Includes
+
 using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.IO;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Singleton class for managing the evolutionary processes.
@@ -15,6 +16,7 @@ using System.IO;
 public class EvolutionManager : MonoBehaviour
 {
     #region Members
+
     private static System.Random randomizer = new System.Random();
 
     public static EvolutionManager Instance
@@ -23,19 +25,20 @@ public class EvolutionManager : MonoBehaviour
         private set;
     }
 
+    [SerializeField]
+    private ParamTrackData paramsTrack;
+
     // Whether or not the results of each generation shall be written to file, to be set in Unity Editor
     [SerializeField]
     private bool SaveStatistics = false;
+
     private string statisticsFileName;
 
     // How many of the first to finish the course should be saved to file, to be set in Unity Editor
     [SerializeField]
     private uint SaveFirstNGenotype = 0;
-    private uint genotypesSaved = 0;
 
-    // Population size, to be set in Unity Editor
-    [SerializeField]
-    private int PopulationSize = 30;
+    private uint genotypesSaved = 0;
 
     // After how many generations should the genetic algorithm be restart (0 for never), to be set in Unity Editor
     [SerializeField]
@@ -51,6 +54,7 @@ public class EvolutionManager : MonoBehaviour
 
     // The current population of agents.
     private List<Agent> agents = new List<Agent>();
+
     /// <summary>
     /// The amount of agents that are currently alive.
     /// </summary>
@@ -74,10 +78,10 @@ public class EvolutionManager : MonoBehaviour
     {
         get { return geneticAlgorithm.GenerationCount; }
     }
-    #endregion
 
-    #region Constructors
-    void Awake()
+    #endregion Members
+
+    private void Awake()
     {
         if (Instance != null)
         {
@@ -86,9 +90,9 @@ public class EvolutionManager : MonoBehaviour
         }
         Instance = this;
     }
-    #endregion
 
     #region Methods
+
     /// <summary>
     /// Starts the evolutionary process.
     /// </summary>
@@ -98,7 +102,7 @@ public class EvolutionManager : MonoBehaviour
         NeuralNetwork nn = new NeuralNetwork(FNNTopology);
 
         //Setup genetic algorithm
-        geneticAlgorithm = new GeneticAlgorithm((uint) nn.WeightCount, (uint) PopulationSize);
+        geneticAlgorithm = new GeneticAlgorithm((uint)nn.WeightCount, (uint)paramsTrack.populationSize);
         genotypesSaved = 0;
 
         geneticAlgorithm.Evaluation = StartEvaluation;
@@ -111,13 +115,13 @@ public class EvolutionManager : MonoBehaviour
             geneticAlgorithm.Mutation = MutateAllButBestTwo;
         }
         else
-        {   
+        {
             //First configuration
             geneticAlgorithm.Selection = RemainderStochasticSampling;
             geneticAlgorithm.Recombination = RandomRecombination;
             geneticAlgorithm.Mutation = MutateAllButBestTwo;
         }
-        
+
         AllAgentsDied += geneticAlgorithm.EvaluationFinished;
 
         //Statistics
@@ -142,11 +146,11 @@ public class EvolutionManager : MonoBehaviour
     // Writes the starting line to the statistics file, stating all genetic algorithm parameters.
     private void WriteStatisticsFileStart()
     {
-        File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + PopulationSize + 
+        File.WriteAllText(statisticsFileName + ".txt", "Evaluation of a Population with size " + paramsTrack.populationSize +
                 ", on Track \"" + GameStateManager.Instance.TrackName + "\", using the following GA operators: " + Environment.NewLine +
                 "Selection: " + geneticAlgorithm.Selection.Method.Name + Environment.NewLine +
                 "Recombination: " + geneticAlgorithm.Recombination.Method.Name + Environment.NewLine +
-                "Mutation: " + geneticAlgorithm.Mutation.Method.Name + Environment.NewLine + 
+                "Mutation: " + geneticAlgorithm.Mutation.Method.Name + Environment.NewLine +
                 "FitnessCalculation: " + geneticAlgorithm.FitnessCalculationMethod.Method.Name + Environment.NewLine + Environment.NewLine);
     }
 
@@ -241,6 +245,7 @@ public class EvolutionManager : MonoBehaviour
     }
 
     #region GA Operators
+
     // Selection operator for the genetic algorithm, using a method called remainder stochastic sampling.
     private List<Genotype> RemainderStochasticSampling(List<Genotype> currentPopulation)
     {
@@ -253,7 +258,7 @@ public class EvolutionManager : MonoBehaviour
                 break;
             else
             {
-                for (int i = 0; i < (int) genotype.Fitness; i++)
+                for (int i = 0; i < (int)genotype.Fitness; i++)
                     intermediatePopulation.Add(new Genotype(genotype.GetParameterCopy()));
             }
         }
@@ -281,7 +286,6 @@ public class EvolutionManager : MonoBehaviour
         newPopulation.Add(intermediatePopulation[0]);
         newPopulation.Add(intermediatePopulation[1]);
 
-
         while (newPopulation.Count < newPopulationSize)
         {
             //Get two random indices that are not the same
@@ -292,7 +296,7 @@ public class EvolutionManager : MonoBehaviour
             } while (randomIndex2 == randomIndex1);
 
             Genotype offspring1, offspring2;
-            GeneticAlgorithm.CompleteCrossover(intermediatePopulation[randomIndex1], intermediatePopulation[randomIndex2], 
+            GeneticAlgorithm.CompleteCrossover(intermediatePopulation[randomIndex1], intermediatePopulation[randomIndex2],
                 GeneticAlgorithm.DefCrossSwapProb, out offspring1, out offspring2);
 
             newPopulation.Add(offspring1);
@@ -322,7 +326,8 @@ public class EvolutionManager : MonoBehaviour
                 GeneticAlgorithm.MutateGenotype(genotype, GeneticAlgorithm.DefMutationProb, GeneticAlgorithm.DefMutationAmount);
         }
     }
-    #endregion
-    #endregion
 
-    }
+    #endregion GA Operators
+
+    #endregion Methods
+}

@@ -29,6 +29,9 @@ public class GameStateManager : MonoBehaviour
     [SerializeField]
     public string TrackName;
 
+    [SerializeField]
+    private GameObject bestcarSave;
+
     /// <summary>
     /// The UIController object.
     /// </summary>
@@ -76,6 +79,7 @@ public class GameStateManager : MonoBehaviour
             {
                 globalCam.gameObject.SetActive(false);
                 Camera.gameObject.SetActive(true);
+                Camera.SetTarget(bestcarSave);
             }
         }
     }
@@ -97,5 +101,9 @@ public class GameStateManager : MonoBehaviour
 
         if (UIController != null)
             UIController.SetDisplayTarget(bestCar);
+        if (bestCar)
+        {
+            bestcarSave = bestCar.gameObject;
+        }
     }
 }

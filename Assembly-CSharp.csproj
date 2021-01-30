@@ -72,11 +72,12 @@
     <Compile Include="Assets\Scripts\Simulation\Sensor.cs" />
     <Compile Include="Assets\Scripts\AI\Evolution\Genotype.cs" />
     <Compile Include="Assets\Scripts\GUI\UIStartMenuController.cs" />
+    <Compile Include="Assets\Scripts\Menu\MenuManager.cs" />
     <Compile Include="Assets\Scripts\GUI\UISimulationController.cs" />
     <Compile Include="Assets\Scripts\AI\Evolution\GeneticAlgorithm.cs" />
     <Compile Include="Assets\Scripts\Simulation\CarMovement.cs" />
     <Compile Include="Assets\Scripts\AI\NeuralNetworks\NeuralNetwork.cs" />
-    <Compile Include="Assets\Scripts\Menu\MenuManager.cs" />
+    <Compile Include="Assets\Scripts\Data\ParamTrackData.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
