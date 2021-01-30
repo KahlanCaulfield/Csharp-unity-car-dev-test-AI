@@ -2,9 +2,10 @@
 /// Date: May 2019
 
 #region Includes
-using UnityEngine;
-#endregion
 
+using UnityEngine;
+
+#endregion Includes
 
 /// <summary>
 /// Component for simple camera target following.
@@ -12,18 +13,23 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     #region Members
+
     // Distance of Camera to target in Z direction, to be set in Unity Editor.
     [SerializeField]
     private int CamZ = -10;
+
     // The initial Camera target, to be set in Unity Editor.
     [SerializeField]
     private GameObject Target;
+
     // The speed of camera movement, to be set in Unity Editor.
     [SerializeField]
     private float CamSpeed = 5f;
+
     // The speed of camera movement when reacting to user input, to be set in Unity Editor.
     [SerializeField]
     private float UserInputSpeed = 50f;
+
     // Whether the camera can be controlled by user input, to be set in Unity Editor.
     [SerializeField]
     private bool AllowUserInput;
@@ -38,9 +44,11 @@ public class CameraMovement : MonoBehaviour
     }
 
     private Vector3 targetCamPos;
-    #endregion
+
+    #endregion Members
 
     #region Methods
+
     /// <summary>
     /// Sets the target to follow.
     /// </summary>
@@ -55,7 +63,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     // Unity method for updating the simulation
-	void FixedUpdate ()
+    private void FixedUpdate()
     {
         //Check movement direction
         if (AllowUserInput)
@@ -121,5 +129,6 @@ public class CameraMovement : MonoBehaviour
 
         targetCamPos += new Vector3(horizontalInput * UserInputSpeed * Time.deltaTime, verticalInput * UserInputSpeed * Time.deltaTime);
     }
-    #endregion
+
+    #endregion Methods
 }

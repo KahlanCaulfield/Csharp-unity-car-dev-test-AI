@@ -2,9 +2,11 @@
 /// Date: May 2019
 
 #region Includes
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Singleton class managing the overall simulation.
@@ -12,9 +14,16 @@ using UnityEngine.SceneManagement;
 public class GameStateManager : MonoBehaviour
 {
     #region Members
+
     // The camera object, to be referenced in Unity Editor.
     [SerializeField]
     private CameraMovement Camera;
+
+    [SerializeField]
+    private Camera globalCam;
+
+    [SerializeField]
+    private Camera followCam;
 
     // The name of the track to be loaded
     [SerializeField]
@@ -23,11 +32,7 @@ public class GameStateManager : MonoBehaviour
     /// <summary>
     /// The UIController object.
     /// </summary>
-    public UIController UIController
-    {
-        get;
-        set;
-    }
+    public UIController UIController;
 
     public static GameStateManager Instance
     {
@@ -36,9 +41,10 @@ public class GameStateManager : MonoBehaviour
     }
 
     private CarController prevBest, prevSecondBest;
-    #endregion
+    private bool globalCamera = false;
 
-    #region Constructors
+    #endregion Members
+
     private void Awake()
     {
         if (Instance != null)
@@ -47,32 +53,49 @@ public class GameStateManager : MonoBehaviour
             return;
         }
         Instance = this;
-
-        //Load gui scene
-        SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
-
-        //Load track
-        SceneManager.LoadScene(TrackName, LoadSceneMode.Additive);
     }
 
-    void Start ()
+    private void Start()
     {
         TrackManager.Instance.BestCarChanged += OnBestCarChanged;
         EvolutionManager.Instance.StartEvolution();
-	}
-    #endregion
+    }
 
-    #region Methods
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            globalCamera = !globalCamera;
+
+            if (globalCamera)
+            {
+                Camera.gameObject.SetActive(false);
+                globalCam.gameObject.SetActive(true);
+            }
+            else
+            {
+                globalCam.gameObject.SetActive(false);
+                Camera.gameObject.SetActive(true);
+            }
+        }
+    }
+
     // Callback method for when the best car has changed.
     private void OnBestCarChanged(CarController bestCar)
     {
-        if (bestCar == null)
-            Camera.SetTarget(null);
+        if (!globalCamera)
+        {
+            if (bestCar == null)
+                Camera.SetTarget(null);
+            else
+                Camera.SetTarget(bestCar.gameObject);
+        }
         else
-            Camera.SetTarget(bestCar.gameObject);
-            
+        {
+            Camera.SetTarget(null);
+        }
+
         if (UIController != null)
             UIController.SetDisplayTarget(bestCar);
     }
-    #endregion
 }

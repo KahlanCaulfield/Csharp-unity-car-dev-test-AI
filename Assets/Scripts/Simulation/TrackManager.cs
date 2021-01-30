@@ -2,10 +2,12 @@
 /// Date: May 2019
 
 #region Includes
+
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Singleton class managing the current track and all cars racing on it, evaluating each individual.
@@ -13,6 +15,7 @@ using System.Collections.Generic;
 public class TrackManager : MonoBehaviour
 {
     #region Members
+
     public static TrackManager Instance
     {
         get;
@@ -22,8 +25,10 @@ public class TrackManager : MonoBehaviour
     // Sprites for visualising best and second best cars. To be set in Unity Editor.
     [SerializeField]
     private Sprite BestCarSprite;
+
     [SerializeField]
     private Sprite SecondBestSprite;
+
     [SerializeField]
     private Sprite NormalCarSprite;
 
@@ -33,8 +38,10 @@ public class TrackManager : MonoBehaviour
     /// Car used to create new cars and to set start position.
     /// </summary>
     public CarController PrototypeCar;
+
     // Start position for cars
     private Vector3 startPosition;
+
     private Quaternion startRotation;
 
     // Struct for storing the current cars and their position on the track.
@@ -45,9 +52,11 @@ public class TrackManager : MonoBehaviour
             this.Car = car;
             this.CheckpointIndex = checkpointIndex;
         }
+
         public CarController Car;
         public uint CheckpointIndex;
     }
+
     private List<RaceCar> cars = new List<RaceCar>();
 
     /// <summary>
@@ -59,7 +68,9 @@ public class TrackManager : MonoBehaviour
     }
 
     #region Best and Second best
+
     private CarController bestCar = null;
+
     /// <summary>
     /// The current best car (furthest in the track).
     /// </summary>
@@ -86,12 +97,14 @@ public class TrackManager : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// Event for when the best car has changed.
     /// </summary>
     public event System.Action<CarController> BestCarChanged;
 
     private CarController secondBestCar = null;
+
     /// <summary>
     /// The current second best car (furthest in the track).
     /// </summary>
@@ -114,13 +127,13 @@ public class TrackManager : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// Event for when the second best car has changed.
     /// </summary>
     public event System.Action<CarController> SecondBestCarChanged;
-    #endregion
 
-    
+    #endregion Best and Second best
 
     /// <summary>
     /// The length of the current track in Unity units (accumulated distance between successive checkpoints).
@@ -130,10 +143,12 @@ public class TrackManager : MonoBehaviour
         get;
         private set;
     }
-    #endregion
+
+    #endregion Members
 
     #region Constructors
-    void Awake()
+
+    private void Awake()
     {
         if (Instance != null)
         {
@@ -154,17 +169,19 @@ public class TrackManager : MonoBehaviour
         CalculateCheckpointPercentages();
     }
 
-    void Start()
+    private void Start()
     {
         //Hide checkpoints
         foreach (Checkpoint check in checkpoints)
             check.IsVisible = false;
     }
-    #endregion
+
+    #endregion Constructors
 
     #region Methods
+
     // Unity method for updating the simulation
-    void Update()
+    private void Update()
     {
         //Update reward for each enabled car on the track
         for (int i = 0; i < cars.Count; i++)
@@ -258,11 +275,11 @@ public class TrackManager : MonoBehaviour
 
         //Set track length to accumulated distance of last checkpoint
         TrackLength = checkpoints[checkpoints.Length - 1].AccumulatedDistance;
-        
+
         //Calculate reward value for each checkpoint
         for (int i = 1; i < checkpoints.Length; i++)
         {
-            checkpoints[i].RewardValue = (checkpoints[i].AccumulatedDistance / TrackLength) - checkpoints[i-1].AccumulatedReward;
+            checkpoints[i].RewardValue = (checkpoints[i].AccumulatedDistance / TrackLength) - checkpoints[i - 1].AccumulatedReward;
             checkpoints[i].AccumulatedReward = checkpoints[i - 1].AccumulatedReward + checkpoints[i].RewardValue;
         }
     }
@@ -291,6 +308,6 @@ public class TrackManager : MonoBehaviour
             return checkpoints[curCheckpointIndex - 1].AccumulatedReward + checkpoints[curCheckpointIndex].GetRewardValue(checkPointDistance);
         }
     }
-    #endregion
 
+    #endregion Methods
 }
