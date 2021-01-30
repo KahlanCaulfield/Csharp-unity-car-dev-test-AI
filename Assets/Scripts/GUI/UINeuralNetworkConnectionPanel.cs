@@ -2,10 +2,12 @@
 /// Date: May 2019
 
 #region Includes
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Class for drawing the connections between neurons of a neural network to GUI.
@@ -13,16 +15,21 @@ using System.Collections.Generic;
 public class UINeuralNetworkConnectionPanel : MonoBehaviour
 {
     #region Members
+
     // References to be set in Unity Editor.
     [SerializeField]
     private List<Image> Connections;
+
     [SerializeField]
     private Color PositiveColor;
+
     [SerializeField]
     private Color NegativeColor;
-    #endregion
+
+    #endregion Members
 
     #region Methods
+
     /// <summary>
     /// Displays the connections of a neuron of one layer to all neurons of the next layer.
     /// </summary>
@@ -51,11 +58,9 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
             Destroy(toBeDestroyed);
         }
 
-
         //Position connections
         for (int i = 0; i < Connections.Count; i++)
             PositionConnection(Connections[i], nextLayer.Nodes[i], neuronIndex, i, currentLayer.Weights);
-
     }
 
     /// <summary>
@@ -74,7 +79,7 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
         //Hide dummy connection
         Connections[0].gameObject.SetActive(false);
     }
-	
+
     // Method for positioning the connection correctly (a bit tricky to draw lines in GUI with unity)
     private void PositionConnection(Image connection, UINeuralNetworkConnectionPanel otherNode, int nodeIndex, int connectedNodeIndex, double[,] weights)
     {
@@ -84,7 +89,7 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
         //Set connection width
         Vector2 sizeDelta = connection.rectTransform.sizeDelta;
         double weight = weights[nodeIndex, connectedNodeIndex];
-        sizeDelta.x = (float) System.Math.Abs(weight);
+        sizeDelta.x = (float)System.Math.Abs(weight);
         if (sizeDelta.x < 1)
             sizeDelta.x = 1;
 
@@ -96,14 +101,14 @@ public class UINeuralNetworkConnectionPanel : MonoBehaviour
 
         //Set connection length (height)
         Vector2 connectionVec = this.transform.position - otherNode.transform.position;
-        sizeDelta.y = connectionVec.magnitude / GameStateManager.Instance.UIController.Canvas.scaleFactor;
+        //sizeDelta.y = connectionVec.magnitude / GameStateManager.Instance.UIController.Canvas.scaleFactor;
 
         connection.rectTransform.sizeDelta = sizeDelta;
 
         //Set connection rotation
         float angle = Vector2.Angle(Vector2.up, connectionVec);
         connection.transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
-
     }
-    #endregion
+
+    #endregion Methods
 }

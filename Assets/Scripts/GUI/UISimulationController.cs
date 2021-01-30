@@ -1,12 +1,13 @@
 ﻿/// Author: PsykoDev
 /// Date: May 2019
 
-
 #region Includes
+
 using UnityEngine.UI;
 using UnityEngine;
 using System;
-#endregion
+
+#endregion Includes
 
 /// <summary>
 /// Class for controlling the various ui elements of the simulation
@@ -14,7 +15,9 @@ using System;
 public class UISimulationController : MonoBehaviour
 {
     #region Members
+
     private CarController target;
+
     /// <summary>
     /// The Car to fill the GUI data with.
     /// </summary>
@@ -36,23 +39,19 @@ public class UISimulationController : MonoBehaviour
     // GUI element references to be set in Unity Editor.
     [SerializeField]
     private Text[] InputTexts;
+
     [SerializeField]
     private Text Evaluation;
+
     [SerializeField]
     private Text GenerationCount;
+
     [SerializeField]
     private UINeuralNetworkPanel NeuralNetPanel;
-    #endregion
 
-    #region Constructors
-    void Awake()
-    {
+    #endregion Members
 
-    }
-    #endregion
-
-    #region Methods
-    void Update()
+    private void Update()
     {
         if (Target != null)
         {
@@ -68,21 +67,4 @@ public class UISimulationController : MonoBehaviour
             GenerationCount.text = EvolutionManager.Instance.GenerationCount.ToString();
         }
     }
-
-    /// <summary>
-    /// Starts to display the gui elements.
-    /// </summary>
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// Stops displaying the gui elements.
-    /// </summary>
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
-    #endregion
 }

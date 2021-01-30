@@ -63,7 +63,6 @@
     <Compile Include="Assets\Scripts\Simulation\CarController.cs" />
     <Compile Include="Assets\Scripts\AI\Agent.cs" />
     <Compile Include="Assets\Scripts\GUI\UINeuralNetworkConnectionPanel.cs" />
-    <Compile Include="Assets\Scripts\GUI\UIController.cs" />
     <Compile Include="Assets\Scripts\AI\Evolution\EvolutionManager.cs" />
     <Compile Include="Assets\Scripts\General\GameStateManager.cs" />
     <Compile Include="Assets\Scripts\General\MathHelper.cs" />

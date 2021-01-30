@@ -6,4 +6,5 @@ using UnityEngine;
 public class ParamTrackData : ScriptableObject
 {
     public int populationSize;
+    public bool SaveFile;
 }
